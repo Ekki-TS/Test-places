@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đặt bàn | Nhà hàng</title>
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/booking.css">
+</head>
+<body data-root="../../">
+  <header id="app-header"></header>
+  <main class="booking-shell">
+    <section id="booking-view">
+      <div class="booking-banner">
+        <div class="booking-banner-inner">
+          <p class="eyebrow">TRẢI NGHIỆM THƯỢNG VỊ · ĐẶT BÀN TRỰC TUYẾN</p>
+          <h1>Nghệ Thuật Đón Tiếp</h1>
+          <p>Quý khách vui lòng đặt chỗ trước để chúng tôi chuẩn bị đón tiếp chu đáo nhất.</p>
+        </div>
+      </div>
+      <div class="booking-layout">
+        <section class="booking-panel">
+          <div class="step-heading"><span>01</span><div><h2>Không Gian & Thời Khắc</h2><p>Chọn chi nhánh và thời gian dùng bữa</p></div><small>BƯỚC 1 / 3</small></div>
+          <label for="branch-id">Chi nhánh</label>
+          <select id="branch-id" required><option value="">Đang tải chi nhánh...</option></select>
+          <p id="branch-info" class="field-hint"></p>
+          <div class="field-grid">
+            <div><label for="booking-date">Ngày dùng bữa</label><input id="booking-date" type="date" required></div>
+            <div><label for="party-size">Số lượng thực khách</label><select id="party-size"><option value="1">1 Khách</option><option value="2" selected>2 Khách</option><option value="3">3 Khách</option><option value="4">4 Khách</option><option value="5">5 Khách</option><option value="6">6 Khách</option><option value="8">8+ Khách</option></select></div>
+          </div>
+          <label>Khung giờ đón tiếp</label>
+          <div class="time-options" id="time-options">
+            <button type="button" data-time="11:30">11:30</button><button type="button" data-time="12:00">12:00</button><button type="button" data-time="12:30">12:30</button><button type="button" data-time="13:00">13:00</button><button type="button" data-time="18:00">18:00</button><button type="button" data-time="18:30">18:30</button><button type="button" data-time="19:00" class="selected">19:00</button><button type="button" data-time="19:30">19:30</button><button type="button" data-time="20:00">20:00</button>
+          </div>
+          <div class="availability-box"><div><strong>Kiểm tra tình trạng bàn</strong><p id="availability-result">Chọn ngày và giờ để kiểm tra bàn phù hợp.</p></div><button type="button" id="btn-check" class="btn btn-light">Kiểm tra</button></div>
+          <div class="section-divider"></div>
+          <div class="step-heading"><span>02</span><div><h2>Không Gian Ưu Tiên</h2><p>Lựa chọn không gian phù hợp với trải nghiệm của bạn</p></div><small>BƯỚC 2 / 3</small></div>
+          <div class="area-options">
+            <label class="area-option selected"><input type="radio" name="area" value="Không gian chung" checked><span class="area-icon">♧</span><strong>Không gian chung</strong><small>Ấm cúng, thoáng đãng, phù hợp mọi dịp</small></label>
+            <label class="area-option"><input type="radio" name="area" value="Bàn cạnh cửa sổ"><span class="area-icon">▧</span><strong>Bàn cạnh cửa sổ</strong><small>Góc nhìn thoáng, ánh sáng tự nhiên</small></label>
+            <label class="area-option"><input type="radio" name="area" value="Phòng VIP"><span class="area-icon">◇</span><strong>Phòng VIP</strong><small>Riêng tư cho buổi gặp mặt đặc biệt</small></label>
+          </div>
+          <div class="section-divider"></div>
+          <div class="step-heading"><span>03</span><div><h2>Thông Tin Liên Hệ & Yêu Cầu</h2><p>Để nhà hàng chuẩn bị đón tiếp chu đáo</p></div><small>BƯỚC 3 / 3</small></div>
+          <div class="field-grid">
+            <div><label for="guest-name">Họ và tên quý khách *</label><input id="guest-name" type="text" maxlength="100" placeholder="Nguyễn Văn An" required></div>
+            <div><label for="guest-phone">Số điện thoại xác nhận *</label><input id="guest-phone" type="tel" maxlength="20" placeholder="090 123 4567" required></div>
+          </div>
+          <label for="guest-email">Thư điện tử nhận thư mời & mã bàn</label><input id="guest-email" type="email" maxlength="100" placeholder="email@example.com">
+          <label for="booking-note">Ghi chú đặc biệt & yêu cầu ẩm thực (tùy chọn)</label><textarea id="booking-note" rows="3" maxlength="255" placeholder="Dị ứng thực phẩm, dịp kỷ niệm hoặc yêu cầu riêng..."></textarea>
+          <div class="privacy-note">♧ Đội ngũ Concierge sẽ gửi tin nhắn SMS xác nhận mã đặt bàn sau khi quý khách hoàn tất yêu cầu.</div>
+          <div id="booking-error" class="booking-alert" role="alert" hidden></div>
+          <button id="btn-book" class="btn btn-primary booking-submit" type="button">♧ &nbsp; Xác Nhận Đặt Bàn Ngay</button>
+        </section>
+        <aside class="booking-aside">
+          <section class="aside-card"><div class="aside-title"><h3>Tóm tắt yêu cầu</h3><span id="summary-step">Đang chọn</span></div><div class="summary-line"><span>Chi nhánh</span><strong id="summary-branch">Chưa chọn</strong></div><div class="summary-line"><span>Thời gian</span><strong id="summary-time">Chưa chọn</strong></div><div class="summary-line"><span>Số thực khách</span><strong id="summary-party">2 Khách</strong></div><div class="summary-line"><span>Khu vực bàn</span><strong id="summary-area">Không gian chung</strong></div><div class="summary-line"><span>Người đặt bàn</span><strong id="summary-name">Chưa nhập</strong></div></section>
+          <section class="aside-card policy-card"><h3>Chính Sách Giữ Bàn</h3><p>◷ Thời gian giữ chỗ: Bàn của quý khách sẽ được bảo lưu tối đa 15 phút so với giờ ghi nhận.</p><p>♧ Quy chuẩn trang phục: Smart Casual (Trang trọng, lịch sự, vui lòng không mặc trang phục thể thao hoặc dép lê).</p><p>◇ Thay đổi lịch: Vui lòng thông báo trước ít nhất 2 giờ nếu cần đổi lịch hoặc hủy bàn tiệc.</p><a href="tel:19008888">HỖ TRỢ RIÊNG TƯ & VIP<br><strong>1900 8888</strong></a></section>
+          <div class="aside-image"><div><small>TRẢI NGHIỆM ĐỘC BẢN</small><strong>Đại Tiệc Rượu Vang & Ẩm Thực</strong><p>Phục vụ đặc quyền với đội ngũ sommelier tận tâm.</p></div></div>
+        </aside>
+      </div>
+    </section>
+    <section id="booking-success-view" class="result-view" hidden>
+      <div class="result-icon">✓</div><p class="eyebrow">XÁC NHẬN GIỮ CHỖ</p><h1>Đặt Bàn Thành Công</h1><p class="result-intro">Nhà hàng đã tiếp nhận yêu cầu và sẵn sàng đón tiếp Quý khách.</p>
+      <div class="confirmation-card"><div class="confirmation-code"><div><small>MÃ ĐẶT BÀN</small><strong id="success-code"></strong></div><button id="copy-code" class="btn btn-light" type="button">▢ Sao chép</button></div><div class="confirmation-grid"><div><small>◷ Thời gian</small><strong id="success-time"></strong></div><div><small>♙ Số lượng khách</small><strong id="success-party"></strong></div><div><small>⌖ Chi nhánh</small><strong id="success-branch"></strong></div><div><small>▤ Khu vực ưu tiên</small><strong id="success-area"></strong></div></div><p class="confirmation-status" id="success-status">Trạng thái: Chờ xác nhận từ nhà hàng</p></div>
+      <div class="result-actions"><a class="btn btn-primary" href="lookup.html">⌕ Tra Cứu Bàn Tiệc</a><a class="btn btn-light" href="../../index.html">⌂ Về Trang Chủ</a></div>
+    </section>
+    <section id="booking-failure-view" class="result-view" hidden>
+      <div class="result-icon failure-icon">!</div><p class="eyebrow">CHƯA THỂ HOÀN TẤT</p><h1>Đặt Bàn Chưa Thành Công</h1><p class="result-intro" id="failure-message">Đã có lỗi xảy ra khi gửi yêu cầu.</p><div class="failure-card"><strong>Gợi ý xử lý</strong><p>Vui lòng kiểm tra lại ngày giờ, số lượng khách hoặc chọn khung giờ khác. Nếu cần hỗ trợ, liên hệ Concierge qua số 1900 8888.</p></div><div class="result-actions"><button id="retry-booking" class="btn btn-primary" type="button">Thử lại</button><a class="btn btn-light" href="lookup.html">Tra cứu đặt bàn</a></div>
+    </section>
+  </main>
+  <footer id="app-footer"></footer>
+  <script src="../../js/config.js"></script><script src="../../js/api.js"></script><script src="../../js/utils.js"></script><script src="../../js/layout.js"></script><script src="../../js/pages/booking.js"></script>
+</body>
+</html>

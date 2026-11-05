@@ -169,3 +169,32 @@ Tắt MySQL khi không dùng: `docker compose down` (dữ liệu vẫn được 
 **Tài khoản mẫu** (mật khẩu chung `Restaurant@123`): `admin@restaurant.com`, `manager@restaurant.com`, `cashier@restaurant.com`, `waiter@restaurant.com`, `kitchen@restaurant.com`.
 
 **Đổi cấu trúc DB:** sửa `sql/init.sql`, commit, báo cả nhóm. Mỗi người chạy `docker compose down -v` rồi `docker compose up -d` để tạo lại DB (mất dữ liệu local, dữ liệu mẫu được nạp lại).
+
+
+## Module M3: Khách hàng đặt bàn
+
+Các API đặt bàn đã được triển khai trong `app/routers/reservations.py`:
+
+| Method | URL | Chức năng |
+|---|---|---|
+| GET | `/api/reservations/branches` | Danh sách chi nhánh đang hoạt động |
+| GET | `/api/reservations/availability` | Kiểm tra bàn phù hợp theo chi nhánh, thời gian, số khách |
+| POST | `/api/reservations` | Tạo yêu cầu đặt bàn |
+| POST | `/api/reservations/lookup` | Tra cứu bằng mã đặt bàn và số điện thoại |
+| POST | `/api/reservations/cancel` | Hủy đặt bàn |
+
+Body tạo đặt bàn:
+
+```json
+{
+  "branch_id": 1,
+  "guest_name": "Nguyen Van A",
+  "guest_phone": "0901234567",
+  "email": "a@example.com",
+  "party_size": 2,
+  "reserved_at": "2026-11-10T19:00:00",
+  "note": "Cho tôi bàn gần cửa sổ"
+}
+```
+
+Backend kiểm tra chi nhánh hoạt động, thời gian tương lai và giờ mở cửa, số khách từ 1–30, sức chứa bàn và lịch đặt đang hoạt động. Mỗi lượt đặt giữ bàn trong khoảng 2 giờ. Khách cần đúng mã đặt bàn và số điện thoại để tra cứu/hủy. Thời gian gửi từ trình duyệt được xử lý theo múi giờ Việt Nam.

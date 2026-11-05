@@ -105,3 +105,12 @@ Lưu ý khi tạo trang:
 - Không code trực tiếp trên `main`: tạo nhánh `feature/<module>-<việc>`, push, tạo Pull Request, bạn khác review rồi merge.
 - Trang nội bộ để trong `pages/admin/`, trang cho khách để trong `pages/customer/`. Mỗi trang 1 file JS riêng trong `js/pages/`.
 - File chung (`js/layout.js`, `css/style.css`): chỉ thêm đúng phần của mình (1 dòng menu, class mới), không đổi màu hay class có sẵn khi chưa báo nhóm.
+
+
+## Module Khách hàng đặt bàn
+
+Trang: `pages/customer/booking.html`.
+
+Chức năng: chọn chi nhánh đang hoạt động; chọn ngày, giờ và số lượng khách; kiểm tra bàn phù hợp; gửi yêu cầu đặt bàn; nhận mã đặt bàn; tra cứu hoặc hủy bằng mã đặt bàn và số điện thoại.
+
+Chạy backend trước, sau đó mở frontend bằng Live Server hoặc chạy `python -m http.server 5500` tại thư mục frontend. Truy cập http://127.0.0.1:5500 và chọn menu **Đặt bàn**.
