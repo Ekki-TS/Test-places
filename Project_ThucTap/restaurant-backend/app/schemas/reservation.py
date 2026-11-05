@@ -49,6 +49,19 @@ class ReservationLookup(BaseModel):
     code: str = Field(min_length=4, max_length=20)
     phone: str = Field(min_length=9, max_length=20)
 
+    @field_validator("code")
+    @classmethod
+    def normalize_code(cls, value: str) -> str:
+        return value.strip().upper()
+
+    @field_validator("phone")
+    @classmethod
+    def normalize_lookup_phone(cls, value: str) -> str:
+        value = value.strip().replace(" ", "").replace("-", "")
+        if not value.isdigit():
+            raise ValueError("Số điện thoại chỉ được chứa chữ số")
+        return value
+
 
 class ReservationOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
