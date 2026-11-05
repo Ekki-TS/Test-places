@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Đặt bàn | Nhà hàng</title>
+  <link rel="icon" href="../../assets/images/logo.svg">
+  <link rel="stylesheet" href="../../css/style.css">
+  <link rel="stylesheet" href="../../css/booking.css">
+</head>
+<body data-root="../../">
+  <header id="app-header"></header>
+
+  <main class="container booking-page">
+    <section class="booking-hero">
+      <p class="booking-eyebrow">TRẢI NGHIỆM ẨM THỰC</p>
+      <h1>Đặt bàn của bạn</h1>
+      <p>Chọn chi nhánh, thời gian và số lượng khách. Nhà hàng sẽ tiếp nhận yêu cầu và gửi mã đặt bàn cho bạn.</p>
+    </section>
+
+    <div class="booking-grid">
+      <section class="card">
+        <h2>Thông tin đặt bàn</h2>
+        <form id="booking-form">
+          <label for="branch-id">Chi nhánh *</label>
+          <select id="branch-id" name="branch_id" required>
+            <option value="">Đang tải chi nhánh...</option>
+          </select>
+          <p id="branch-info" class="muted"></p>
+
+          <div class="booking-two">
+            <div>
+              <label for="booking-date">Ngày đến *</label>
+              <input id="booking-date" name="booking_date" type="date" required>
+            </div>
+            <div>
+              <label for="booking-time">Giờ đến *</label>
+              <input id="booking-time" name="booking_time" type="time" required>
+            </div>
+          </div>
+
+          <label for="party-size">Số lượng khách *</label>
+          <input id="party-size" name="party_size" type="number" min="1" max="30" value="2" required>
+
+          <div class="availability-row">
+            <button id="btn-check" class="btn" type="button">Kiểm tra bàn trống</button>
+            <span id="availability-result" class="muted" aria-live="polite"></span>
+          </div>
+
+          <hr>
+          <h3>Thông tin liên hệ</h3>
+          <label for="guest-name">Họ và tên *</label>
+          <input id="guest-name" name="guest_name" type="text" minlength="2" maxlength="100" autocomplete="name" required>
+
+          <label for="guest-phone">Số điện thoại *</label>
+          <input id="guest-phone" name="guest_phone" type="tel" minlength="9" maxlength="20" autocomplete="tel" placeholder="Ví dụ: 0901234567" required>
+
+          <label for="guest-email">Email</label>
+          <input id="guest-email" name="email" type="email" maxlength="100" autocomplete="email">
+
+          <label for="booking-note">Ghi chú</label>
+          <textarea id="booking-note" name="note" rows="3" maxlength="255" placeholder="Yêu cầu đặc biệt (nếu có)"></textarea>
+
+          <button id="btn-book" class="btn btn-primary booking-submit" type="submit">Gửi yêu cầu đặt bàn</button>
+          <p class="muted">Đặt bàn sẽ ở trạng thái chờ xác nhận cho đến khi nhà hàng tiếp nhận.</p>
+        </form>
+        <div id="booking-result" aria-live="polite"></div>
+      </section>
+
+      <section class="card lookup-card">
+        <h2>Tra cứu đặt bàn</h2>
+        <p class="muted">Nhập mã đặt bàn và số điện thoại đã dùng khi đặt.</p>
+        <form id="lookup-form">
+          <label for="lookup-code">Mã đặt bàn *</label>
+          <input id="lookup-code" name="code" type="text" minlength="4" maxlength="20" placeholder="Ví dụ: RS12AB34CD" required>
+
+          <label for="lookup-phone">Số điện thoại *</label>
+          <input id="lookup-phone" name="phone" type="tel" minlength="9" maxlength="20" required>
+
+          <div class="form-actions">
+            <button class="btn btn-primary" type="submit">Tra cứu</button>
+            <button id="btn-cancel-booking" class="btn btn-danger" type="button">Hủy đặt bàn</button>
+          </div>
+        </form>
+        <div id="lookup-result" aria-live="polite"></div>
+      </section>
+    </div>
+  </main>
+
+  <footer id="app-footer"></footer>
+
+  <script src="../../js/config.js"></script>
+  <script src="../../js/api.js"></script>
+  <script src="../../js/utils.js"></script>
+  <script src="../../js/layout.js"></script>
+  <script src="../../js/pages/booking.js"></script>
+</body>
+</html>
