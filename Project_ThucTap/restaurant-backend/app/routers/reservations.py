@@ -38,12 +38,15 @@ def check_availability(
     party_size: int = Query(ge=1, le=30),
     db: Session = Depends(get_db),
 ):
-    branch = reservation_crud.get_active_branches(db)
-    if not any(item.id == branch_id for item in branch):
+    branch = reservation_crud.get_active_branch(db, branch_id)
+    if branch is None:
         raise HTTPException(status_code=404, detail="Không tìm thấy chi nhánh đang hoạt động")
 
-    if reserved_at <= datetime.now():
+    if reserved_at <= reservation_crud.local_now():
         raise HTTPException(status_code=400, detail="Thời gian đặt bàn phải ở tương lai")
+
+    if not (branch.open_time <= reserved_at.time() < branch.close_time):
+        raise HTTPException(status_code=400, detail="Thời gian đặt bàn nằm ngoài giờ hoạt động của chi nhánh")
 
     tables = reservation_crud.get_available_tables(db, branch_id, reserved_at, party_size)
     return AvailabilityOut(
