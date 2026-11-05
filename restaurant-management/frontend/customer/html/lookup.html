@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tra cứu đặt bàn - Nhà hàng</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../css/customer.css">
+    <link rel="stylesheet" href="../css/result.css">
+</head>
+<body class="customer" data-page="lookup">
+    <div id="site-header"></div>
+
+    <main class="result-page">
+        <div class="result-head lookup-head">
+            <h1>Tra Cứu Đặt Bàn</h1>
+            <p>Kiểm tra trạng thái đặt bàn và chi tiết đón tiếp.</p>
+        </div>
+
+        <div class="search-card">
+            <div class="tabs">
+                <div class="tabs-inner" id="tabs">
+                    <button type="button" class="on" data-mode="code"><i data-icon="ticket"></i> Mã đặt bàn</button>
+                    <button type="button" data-mode="phone"><i data-icon="mobile"></i> Số điện thoại</button>
+                </div>
+            </div>
+            <form id="lookupForm" novalidate>
+                <div class="search-row">
+                    <div class="field-wrap">
+                        <span class="lead" id="leadIcon"><i data-icon="ticket"></i></span>
+                        <input id="q" class="input" type="text" placeholder="Nhập mã đặt bàn, VD: RB-2K9X4F" autocomplete="off">
+                    </div>
+                    <button type="submit" class="btn" id="searchBtn"><i data-icon="search"></i> Tra cứu</button>
+                </div>
+                <div class="search-err" id="searchErr" hidden></div>
+            </form>
+        </div>
+
+        <div class="results" id="results"></div>
+
+        <div class="help-grid">
+            <div class="help-card">
+                <div class="ic"><i data-icon="wine"></i></div>
+                <h3>Thực đơn chọn trước</h3>
+                <p>Khám phá thực đơn Theo Mùa và danh tuyển rượu vang Sommelier Tuyển Chọn để món ăn được chuẩn bị sẵn sàng khi quý khách an tọa.</p>
+                <a href="../index.html#menu">Duyệt thực đơn <i data-icon="arrow"></i></a>
+            </div>
+            <div class="help-card">
+                <div class="ic"><i data-icon="walk"></i></div>
+                <h3>Quy chuẩn trang phục</h3>
+                <p>Để bảo toàn không gian thanh tịnh trang nhã, nhà hàng khuyến nghị trang phục Lịch thiệp (Smart Casual).</p>
+                <a href="#">Xem chi tiết quy chuẩn <i data-icon="arrow"></i></a>
+            </div>
+            <div class="help-card">
+                <div class="ic"><i data-icon="concierge"></i></div>
+                <h3>Trợ lý yến tiệc riêng</h3>
+                <p>Đội ngũ Concierge luôn sẵn sàng hỗ trợ sắp xếp hoa tươi, chuẩn bị thiệp viết tay hoặc tư vấn phòng khách tiết VIP.</p>
+                <a href="tel:19008888">Gọi chuyên viên tư vấn <i data-icon="arrow"></i></a>
+            </div>
+        </div>
+    </main>
+
+    <!-- Hộp thoại hủy đặt bàn -->
+    <div class="modal-backdrop" id="cancelModal" hidden>
+        <div class="modal" role="dialog" aria-labelledby="cancelTitle">
+            <h3 id="cancelTitle">Hủy đặt bàn?</h3>
+            <p id="cancelDesc"></p>
+            <div class="field" id="cancelPhoneField">
+                <label class="label" for="cancelPhone">Số điện thoại đã dùng khi đặt bàn</label>
+                <input id="cancelPhone" class="input" type="tel" placeholder="0901 234 567">
+            </div>
+            <div class="search-err" id="cancelErr" hidden></div>
+            <div class="actions" style="margin-top:14px">
+                <button type="button" class="btn light" id="cancelKeep">Giữ lại</button>
+                <button type="button" class="btn" id="cancelConfirm">Xác nhận hủy</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="site-footer"></div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/lookup.js"></script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt bàn - Nhà hàng</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../css/customer.css">
+    <link rel="stylesheet" href="../css/booking.css">
+</head>
+<body class="customer" data-page="booking">
+    <div id="site-header"></div>
+
+    <main>
+        <!-- Hero -->
+        <section class="hero">
+            <div class="wrap hero-inner">
+                <div>
+                    <div class="eyebrow">Trải nghiệm thượng vị • Đặt bàn trực tuyến</div>
+                    <h1>Nghệ Thuật Đón Tiếp</h1>
+                    <p>Quý khách vui lòng đặt chỗ trước để chúng tôi chuẩn bị đón tiếp chu đáo nhất. Mỗi bàn tiệc là một hành trình cảm thụ ẩm thực tao nhã và chuẩn mực.</p>
+                </div>
+                <div class="hero-note">
+                    <span class="hero-note-icon"><i data-icon="shield"></i></span>
+                    <div>
+                        <strong>Bảo đảm sự riêng tư</strong>
+                        <small>Giữ chỗ miễn phí, xác nhận trong 15 phút</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <div class="wrap booking-layout">
+            <!-- ========== FORM ========== -->
+            <form id="bookingForm" class="form-card" novalidate>
+
+                <!-- Bước 1 -->
+                <section class="step">
+                    <header class="step-head">
+                        <h2><span class="dot"></span>1. Không Gian &amp; Thời Khắc</h2>
+                        <span class="step-no">BƯỚC 1 / 3</span>
+                    </header>
+
+                    <div class="field" id="f-branch_id">
+                        <label class="label" for="branch_id"><i data-icon="store"></i> Chọn Chi nhánh Thưởng Lãm</label>
+                        <div class="field-wrap">
+                            <select id="branch_id" class="input select"><option value="">Đang tải chi nhánh...</option></select>
+                            <span class="tail"><i data-icon="chevron"></i></span>
+                        </div>
+                        <div class="err"></div>
+                    </div>
+
+                    <div class="two-col">
+                        <div class="field" id="f-date">
+                            <label class="label" for="date"><i data-icon="calendar"></i> Ngày Dùng Bữa</label>
+                            <input id="date" type="date" class="input">
+                            <div class="err"></div>
+                        </div>
+                        <div class="field" id="f-party_size">
+                            <div class="label-row">
+                                <label class="label"><i data-icon="users"></i> Số Lượng Thực Khách</label>
+                                <span class="party-text" id="partyText">4 Khách</span>
+                            </div>
+                            <div class="party-group" id="partyGroup">
+                                <button type="button" data-size="2">2</button>
+                                <button type="button" data-size="4" class="on">4</button>
+                                <button type="button" data-size="6">6</button>
+                                <button type="button" data-size="big">8+</button>
+                            </div>
+                            <div class="big-party" id="bigPartyBox" hidden>
+                                <label for="bigParty">Số khách (8 - 20):</label>
+                                <input id="bigParty" type="number" class="input" min="8" max="20" value="8">
+                            </div>
+                            <div class="err"></div>
+                        </div>
+                    </div>
+
+                    <div class="field" id="f-time">
+                        <div class="label-row">
+                            <label class="label"><i data-icon="clock"></i> Khung Giờ Đón Tiếp</label>
+                            <span class="hint">Bữa Trưa &amp; Tối</span>
+                        </div>
+                        <div class="slot-row">
+                            <span class="slot-label">TRƯA:</span>
+                            <div class="slots" id="slotsLunch"></div>
+                        </div>
+                        <div class="slot-row">
+                            <span class="slot-label">TỐI:</span>
+                            <div class="slots" id="slotsDinner"></div>
+                        </div>
+                        <div class="slot-status" id="slotStatus"></div>
+                        <div class="err"></div>
+                    </div>
+                </section>
+
+                <!-- Bước 2 -->
+                <section class="step step-pref">
+                    <header class="step-head">
+                        <h2><span class="dot"></span>2. Không Gian Ưu Tiên</h2>
+                        <span class="step-no">BƯỚC 2 / 3</span>
+                    </header>
+                    <div class="pref-grid" id="prefGrid">
+                        <button type="button" class="pref" data-pref="general">
+                            <i data-icon="sofa"></i>
+                            <span class="pref-radio"></span>
+                            <strong>Khu Vực Chung</strong>
+                            <small>Yên tĩnh, trang nhã, âm nhạc thính phòng nhẹ nhàng</small>
+                        </button>
+                        <button type="button" class="pref on" data-pref="window">
+                            <i data-icon="window"></i>
+                            <span class="pref-radio"></span>
+                            <strong>Bàn Cạnh Cửa Sổ</strong>
+                            <small>Góc nhìn toàn cảnh phố thị về đêm lung linh</small>
+                        </button>
+                        <button type="button" class="pref" data-pref="vip">
+                            <i data-icon="door"></i>
+                            <span class="pref-radio"></span>
+                            <strong>Phòng VIP Private</strong>
+                            <small>Riêng tư tuyệt đối với viên chuyên biệt</small>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Bước 3 -->
+                <section class="step">
+                    <header class="step-head">
+                        <h2><span class="dot"></span>3. Thông Tin Liên Hệ &amp; Yêu Cầu</h2>
+                        <span class="step-no">BƯỚC 3 / 3</span>
+                    </header>
+
+                    <div class="two-col">
+                        <div class="field" id="f-full_name">
+                            <label class="label" for="full_name">Họ và Tên Quý Khách <span class="req">*</span></label>
+                            <div class="field-wrap">
+                                <input id="full_name" type="text" class="input" maxlength="100" placeholder="Ví dụ: Nguyễn Văn An" autocomplete="name">
+                                <span class="tail tick" hidden><i data-icon="check"></i></span>
+                            </div>
+                            <div class="err"></div>
+                        </div>
+                        <div class="field" id="f-phone">
+                            <label class="label" for="phone">Số Điện Thoại Xác Nhận <span class="req">*</span></label>
+                            <div class="field-wrap">
+                                <input id="phone" type="tel" class="input" placeholder="0901 234 567" autocomplete="tel">
+                                <span class="tail tick" hidden><i data-icon="check"></i></span>
+                            </div>
+                            <div class="err"></div>
+                        </div>
+                    </div>
+
+                    <div class="field" id="f-email">
+                        <label class="label" for="email">Thư Điện Tử Nhận Thư Mời &amp; Mã Bàn <span class="req">*</span></label>
+                        <div class="field-wrap">
+                            <input id="email" type="email" class="input" placeholder="an.nguyen@example.com" autocomplete="email">
+                            <span class="tail"><i data-icon="mail"></i></span>
+                        </div>
+                        <div class="err"></div>
+                    </div>
+
+                    <div class="field" id="f-note">
+                        <label class="label" for="note">Ghi Chú Đặc Biệt &amp; Yêu Cầu Ẩm Thực (Tùy chọn)</label>
+                        <textarea id="note" class="input" rows="4" maxlength="255" placeholder="Ví dụ: Kỷ niệm ngày cưới, chuẩn bị nến thơm, dị ứng hải sản có vỏ, yêu cầu sommelier tư vấn rượu vang..."></textarea>
+                        <div class="err"></div>
+                    </div>
+
+                    <div class="info-box">
+                        <i data-icon="info"></i>
+                        <span>Đội ngũ Concierge sẽ gửi tin nhắn SMS xác nhận kèm đường dẫn quản lý chỗ ngồi ngay sau khi quý khách hoàn tất biểu mẫu.</span>
+                    </div>
+
+                    <button type="submit" class="btn block" id="submitBtn"><i data-icon="concierge"></i> Xác Nhận Đặt Bàn Ngay</button>
+                </section>
+            </form>
+
+            <!-- ========== SIDEBAR ========== -->
+            <aside class="side">
+                <div class="side-card">
+                    <div class="side-title"><h3><i data-icon="ticket"></i> TÓM TẮT YÊU CẦU</h3><span class="chip">Đang chọn</span></div>
+                    <dl class="summary">
+                        <div><dt>Chi nhánh:</dt><dd id="sumBranch">—</dd></div>
+                        <div><dt>Thời gian:</dt><dd id="sumTime">—</dd></div>
+                        <div><dt>Số thực khách:</dt><dd id="sumParty">4 Khách</dd></div>
+                        <div><dt>Khu vực bàn:</dt><dd id="sumPref">Bàn cạnh cửa sổ</dd></div>
+                        <div><dt>Người đặt bàn:</dt><dd id="sumName">Chưa nhập</dd></div>
+                    </dl>
+                    <div class="fee"><span>Phí giữ chỗ:</span><strong>Miễn Phí</strong></div>
+                </div>
+
+                <div class="side-card policy">
+                    <h3><i data-icon="shield"></i> Chính Sách Giữ Bàn</h3>
+                    <ul>
+                        <li><i data-icon="clock"></i><span><b>Thời gian giữ chỗ:</b> Bàn của quý khách sẽ được bảo lưu tối đa 15 phút so với giờ hẹn.</span></li>
+                        <li><i data-icon="users"></i><span><b>Quy chuẩn trang phục:</b> Smart Casual (Trang trọng, lịch sự, vui lòng không mặc trang phục thể thao hoặc dép lê).</span></li>
+                        <li><i data-icon="calendar"></i><span><b>Thay đổi lịch:</b> Vui lòng thông báo trước ít nhất 2 giờ nếu cần đổi lịch hoặc hủy bàn tiệc.</span></li>
+                    </ul>
+                    <div class="vip-call">
+                        <div><small>HỖ TRỢ TIỆC RIÊNG &amp; VIP</small><strong>1900 8888</strong></div>
+                        <a href="tel:19008888" class="call-btn" aria-label="Gọi hotline"><i data-icon="phone"></i></a>
+                    </div>
+                </div>
+
+                <div class="promo">
+                    <span class="promo-tag">TRẢI NGHIỆM ĐỘC BẢN</span>
+                    <h3>Dạ Tiệc Rượu Vang &amp; Nấm Truffle</h3>
+                    <p>Phục vụ độc quyền vào tối thứ Sáu hàng tuần tại phòng VIP.</p>
+                    <span class="promo-star"><i data-icon="star"></i></span>
+                </div>
+            </aside>
+        </div>
+    </main>
+
+    <!-- Hộp thoại báo đặt bàn thất bại -->
+    <div class="modal-backdrop" id="failModal" hidden>
+        <div class="modal" role="alertdialog" aria-labelledby="failTitle" aria-describedby="failMsg">
+            <div class="badge-icon fail"><i data-icon="x"></i></div>
+            <h3 id="failTitle">Đặt bàn chưa thành công</h3>
+            <p id="failMsg"></p>
+            <div class="actions">
+                <button type="button" class="btn" id="failRetry">Chỉnh sửa &amp; thử lại</button>
+                <a class="btn light" href="tel:19008888"><i data-icon="phone"></i> Gọi 1900 8888</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="site-footer"></div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/booking.js"></script>
+</body>
+</html>

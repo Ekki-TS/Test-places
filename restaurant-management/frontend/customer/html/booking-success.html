@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Đặt bàn thành công - Nhà hàng</title>
+    <link rel="stylesheet" href="../../assets/css/style.css">
+    <link rel="stylesheet" href="../css/customer.css">
+    <link rel="stylesheet" href="../css/result.css">
+</head>
+<body class="customer" data-page="booking">
+    <div id="site-header"></div>
+
+    <main class="result-page">
+        <!-- Thanh cong -->
+        <section id="okView" hidden>
+            <div class="result-head">
+                <div class="seal ok"><i data-icon="check"></i></div>
+                <div class="eyebrow">XÁC NHẬN GIỮ CHỖ</div>
+                <h1>Đặt Bàn Thành Công</h1>
+                <p>Bàn tiệc đã sẵn sàng đón tiếp Quý khách. Nhà hàng sẽ gọi điện xác nhận trong vòng 15 phút. Mã đặt bàn cũng được gửi qua email của quý khách.</p>
+            </div>
+
+            <div class="ticket">
+                <div class="ticket-top">
+                    <div>
+                        <small>MÃ ĐẶT BÀN</small>
+                        <div class="code" id="code">—</div>
+                    </div>
+                    <button type="button" class="btn soft" id="copyBtn"><i data-icon="copy"></i> Sao chép</button>
+                </div>
+                <div class="ticket-grid">
+                    <div class="cell"><small><i data-icon="calendar"></i> Thời gian</small><strong id="rTime">—</strong></div>
+                    <div class="cell"><small><i data-icon="users"></i> Số lượng khách</small><strong id="rParty">—</strong></div>
+                    <div class="cell"><small><i data-icon="pin"></i> Chi nhánh</small><strong id="rBranch">—</strong></div>
+                    <div class="cell"><small><i data-icon="chair"></i> Khu vực bàn</small><strong id="rPref">—</strong></div>
+                    <div class="cell"><small><i data-icon="user"></i> Người đặt</small><strong id="rName">—</strong></div>
+                    <div class="cell"><small><i data-icon="info"></i> Trạng thái</small><strong id="rStatus">—</strong></div>
+                </div>
+            </div>
+
+            <div class="result-actions">
+                <a class="btn" id="lookupLink" href="lookup.html"><i data-icon="search"></i> Tra Cứu Bàn Tiệc</a>
+                <a class="btn light" href="../index.html"><i data-icon="home"></i> Về Trang Chủ</a>
+            </div>
+        </section>
+
+        <!-- Khong co du lieu (mo thang trang, hoac het phien) -->
+        <section id="emptyView" hidden>
+            <div class="result-head">
+                <div class="seal fail"><i data-icon="info"></i></div>
+                <div class="eyebrow">KHÔNG TÌM THẤY THÔNG TIN</div>
+                <h1>Chưa Có Đặt Bàn Nào</h1>
+                <p>Trang này chỉ hiển thị ngay sau khi quý khách đặt bàn. Nếu đã đặt bàn trước đó, vui lòng tra cứu bằng mã đặt bàn hoặc số điện thoại.</p>
+            </div>
+            <div class="result-actions">
+                <a class="btn" href="lookup.html"><i data-icon="search"></i> Tra Cứu Đặt Bàn</a>
+                <a class="btn light" href="booking.html"><i data-icon="calendar"></i> Đặt Bàn Mới</a>
+            </div>
+        </section>
+    </main>
+
+    <div id="site-footer"></div>
+
+    <script src="../../assets/js/api.js"></script>
+    <script src="../js/common.js"></script>
+    <script src="../js/booking-success.js"></script>
+</body>
+</html>
