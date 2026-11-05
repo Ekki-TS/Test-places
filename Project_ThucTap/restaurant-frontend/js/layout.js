@@ -1,6 +1,7 @@
 const MENU = [
   { href: "index.html", label: "Trang chủ" },
   { href: "pages/customer/booking.html", label: "Đặt bàn" },
+  { href: "pages/customer/lookup.html", label: "Tra cứu đặt bàn" },
   { href: "pages/admin/branches.html", label: "Chi nhánh" },
 ];
 
