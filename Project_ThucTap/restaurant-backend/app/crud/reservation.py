@@ -1,5 +1,6 @@
 from datetime import datetime, timedelta
 from secrets import token_hex
+from zoneinfo import ZoneInfo
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -13,6 +14,20 @@ from app.schemas.reservation import ReservationCreate
 
 ACTIVE_STATUSES = ("pending", "confirmed", "seated")
 BOOKING_DURATION = timedelta(hours=2)
+LOCAL_TIMEZONE = ZoneInfo("Asia/Ho_Chi_Minh")
+
+
+def local_now() -> datetime:
+    return datetime.now(LOCAL_TIMEZONE).replace(tzinfo=None)
+
+
+def get_active_branch(db: Session, branch_id: int) -> Branch | None:
+    return db.scalar(
+        select(Branch).where(
+            Branch.id == branch_id,
+            Branch.is_active.is_(True),
+        )
+    )
 
 
 def get_active_branches(db: Session) -> list[Branch]:
@@ -56,7 +71,7 @@ def create_reservation(db: Session, data: ReservationCreate) -> Reservation:
     if branch is None:
         raise ValueError("Chi nhánh không tồn tại hoặc đã ngừng hoạt động")
 
-    if data.reserved_at <= datetime.now():
+    if data.reserved_at <= local_now():
         raise ValueError("Thời gian đặt bàn phải ở tương lai")
 
     if not (branch.open_time <= data.reserved_at.time() < branch.close_time):
@@ -112,7 +127,7 @@ def lookup_reservation(db: Session, code: str, phone: str) -> Reservation | None
 def cancel_reservation(db: Session, reservation: Reservation) -> Reservation:
     if reservation.status not in ("pending", "confirmed"):
         raise ValueError("Chỉ có thể hủy đặt bàn đang chờ hoặc đã xác nhận")
-    if reservation.reserved_at <= datetime.now():
+    if reservation.reserved_at <= local_now():
         raise ValueError("Không thể hủy đặt bàn đã đến giờ phục vụ")
     reservation.status = "cancelled"
     db.commit()
