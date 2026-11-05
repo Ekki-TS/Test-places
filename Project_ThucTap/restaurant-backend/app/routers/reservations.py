@@ -1,4 +1,5 @@
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
@@ -13,6 +14,12 @@ from app.schemas.reservation import (
 )
 
 router = APIRouter(prefix="/reservations", tags=["Customer Booking"])
+
+
+def to_local_datetime(value: datetime) -> datetime:
+    if value.tzinfo is not None:
+        return value.astimezone(ZoneInfo("Asia/Ho_Chi_Minh")).replace(tzinfo=None)
+    return value
 
 
 @router.get("/branches")
@@ -38,6 +45,7 @@ def check_availability(
     party_size: int = Query(ge=1, le=30),
     db: Session = Depends(get_db),
 ):
+    reserved_at = to_local_datetime(reserved_at)
     branch = reservation_crud.get_active_branch(db, branch_id)
     if branch is None:
         raise HTTPException(status_code=404, detail="Không tìm thấy chi nhánh đang hoạt động")
