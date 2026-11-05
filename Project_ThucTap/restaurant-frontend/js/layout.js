@@ -1,14 +1,6 @@
-// Layout chung: tự chèn header (menu) và footer vào mọi trang,
-// để không phải copy lại HTML menu ở từng file.
-//
-// Mỗi trang cần có:  <body data-root="./">   (trang ở thư mục gốc)
-//              hoặc  <body data-root="../">  (trang trong pages/)
-//              hoặc  <body data-root="../../"> (trang trong pages/admin/ hoặc pages/customer/)
-// và hai thẻ rỗng:   <header id="app-header"></header> ... <footer id="app-footer"></footer>
-
-// Thêm trang mới vào menu: thêm 1 dòng vào mảng này (đường dẫn tính từ thư mục frontend/)
 const MENU = [
   { href: "index.html", label: "Trang chủ" },
+  { href: "pages/customer/booking.html", label: "Đặt bàn" },
   { href: "pages/admin/branches.html", label: "Chi nhánh" },
 ];
 
