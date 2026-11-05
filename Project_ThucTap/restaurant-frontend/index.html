@@ -13,26 +13,21 @@
   <main class="container">
     <section class="card">
       <h1>Hệ thống quản lý nhà hàng</h1>
-      <p>Repo frontend của Nhóm 6 (mô phỏng theo Pizza 4P's). Trang này kiểm tra kết nối <strong>Frontend → Backend → MySQL</strong>.</p>
-
+      <p>Trang kiểm tra kết nối Frontend → Backend → MySQL và truy cập các chức năng của hệ thống.</p>
       <p>API đang dùng: <code id="api-url"></code> <span class="muted">(sửa trong <code>js/config.js</code>)</span></p>
       <div id="health-status" class="status"></div>
       <button id="btn-recheck" class="btn">Kiểm tra lại</button>
     </section>
 
     <section class="card">
-      <h2>Bắt đầu từ đâu?</h2>
-      <ol>
-        <li>Xem trang <a href="pages/admin/branches.html">Chi nhánh</a>: ví dụ thêm / sửa / ngừng hoạt động / tìm kiếm gọi API thật.</li>
-        <li>Đọc <code>js/api.js</code> để biết cách gọi API.</li>
-        <li>Tạo trang mới: copy <code>pages/admin/branches.html</code> + <code>js/pages/branches.js</code>, thêm link vào <code>js/layout.js</code>.</li>
-      </ol>
+      <h2>Bắt đầu</h2>
+      <p><a href="pages/customer/booking.html">Đặt bàn trực tuyến</a> – khách chọn chi nhánh, thời gian, số khách, tra cứu và hủy đặt bàn.</p>
+      <p><a href="pages/admin/branches.html">Quản lý chi nhánh</a> – ví dụ CRUD nội bộ kết nối API.</p>
     </section>
   </main>
 
   <footer id="app-footer"></footer>
 
-  <!-- Thứ tự quan trọng: config -> api -> utils -> layout -> script riêng của trang -->
   <script src="js/config.js"></script>
   <script src="js/api.js"></script>
   <script src="js/utils.js"></script>
