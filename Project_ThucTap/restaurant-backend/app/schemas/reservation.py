@@ -1,4 +1,5 @@
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 from pydantic import BaseModel, ConfigDict, Field, field_validator
 
@@ -35,6 +36,13 @@ class ReservationCreate(BaseModel):
             return None
         value = value.strip()
         return value or None
+
+    @field_validator("reserved_at")
+    @classmethod
+    def normalize_reserved_at(cls, value: datetime) -> datetime:
+        if value.tzinfo is not None:
+            return value.astimezone(ZoneInfo("Asia/Ho_Chi_Minh")).replace(tzinfo=None)
+        return value
 
 
 class ReservationLookup(BaseModel):
