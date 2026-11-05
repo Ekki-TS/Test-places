@@ -1,191 +1,140 @@
-const bookingForm = document.getElementById("booking-form");
+const bookingFormView = document.getElementById("booking-view");
+const successView = document.getElementById("booking-success-view");
+const failureView = document.getElementById("booking-failure-view");
 const branchSelect = document.getElementById("branch-id");
 const dateInput = document.getElementById("booking-date");
-const timeInput = document.getElementById("booking-time");
 const partyInput = document.getElementById("party-size");
 const availabilityResult = document.getElementById("availability-result");
-const bookingResult = document.getElementById("booking-result");
-const lookupForm = document.getElementById("lookup-form");
-const lookupResult = document.getElementById("lookup-result");
-const cancelBookingButton = document.getElementById("btn-cancel-booking");
-
+const bookingError = document.getElementById("booking-error");
 let branches = [];
+let selectedTime = "19:00";
+let latestReservationCode = "";
 
-function localDateValue(date) {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  return year + "-" + month + "-" + day;
+function dateValue(date) {
+  return date.getFullYear() + "-" + String(date.getMonth() + 1).padStart(2, "0") + "-" + String(date.getDate()).padStart(2, "0");
 }
-
-function getBookingDateTime() {
-  if (!dateInput.value || !timeInput.value) return null;
-  return dateInput.value + "T" + timeInput.value + ":00";
-}
-
-function getSelectedBranch() {
+function selectedBranch() {
   return branches.find((branch) => branch.id === Number(branchSelect.value));
 }
-
-async function loadBookingBranches() {
+function reservedAt() {
+  return dateInput.value && selectedTime ? dateInput.value + "T" + selectedTime + ":00" : "";
+}
+function selectedArea() {
+  return document.querySelector('input[name="area"]:checked').value;
+}
+function showBookingError(message) {
+  bookingError.textContent = message;
+  bookingError.hidden = false;
+}
+function updateSummary() {
+  const branch = selectedBranch();
+  document.getElementById("summary-branch").textContent = branch ? branch.name : "Chưa chọn";
+  document.getElementById("summary-time").textContent = dateInput.value ? dateInput.value.split("-").reverse().join("/") + " · " + selectedTime : "Chưa chọn";
+  document.getElementById("summary-party").textContent = partyInput.value + " Khách";
+  document.getElementById("summary-area").textContent = selectedArea();
+  document.getElementById("summary-name").textContent = document.getElementById("guest-name").value.trim() || "Chưa nhập";
+  document.getElementById("branch-info").textContent = branch ? branch.address + " · " + String(branch.open_time).slice(0,5) + " – " + String(branch.close_time).slice(0,5) : "";
+}
+async function loadBranches() {
   try {
     branches = await api.get("/reservations/branches");
-    branchSelect.innerHTML = '<option value="">-- Chọn chi nhánh --</option>' +
-      branches.map((branch) =>
-        '<option value="' + branch.id + '">' + escapeHtml(branch.name) + '</option>'
-      ).join("");
-
-    if (branches.length === 0) {
-      branchSelect.innerHTML = '<option value="">Hiện chưa có chi nhánh hoạt động</option>';
-    }
-    updateBranchInfo();
+    branchSelect.innerHTML = '<option value="">Chọn chi nhánh</option>' + branches.map((branch) => '<option value="' + branch.id + '">' + escapeHtml(branch.name) + " - " + escapeHtml(branch.address) + "</option>").join("");
+    if (!branches.length) branchSelect.innerHTML = '<option value="">Chưa có chi nhánh hoạt động</option>';
+    updateSummary();
   } catch (error) {
-    branchSelect.innerHTML = '<option value="">Không tải được chi nhánh</option>';
-    showToast(error.message, "error");
+    showBookingError(error.message);
   }
 }
-
-function updateBranchInfo() {
-  const branch = getSelectedBranch();
-  const info = document.getElementById("branch-info");
-  if (!branch) {
-    info.textContent = "";
-    return;
-  }
-  info.textContent = branch.address + " · Giờ mở cửa: " +
-    String(branch.open_time).slice(0, 5) + " - " + String(branch.close_time).slice(0, 5);
-}
-
 async function checkAvailability() {
-  const dateTime = getBookingDateTime();
-  const branchId = Number(branchSelect.value);
-  const partySize = Number(partyInput.value);
-
-  if (!branchId || !dateTime || !partySize || partySize < 1 || partySize > 30) {
-    availabilityResult.textContent = "Vui lòng chọn chi nhánh, ngày, giờ và số khách hợp lệ.";
-    availabilityResult.className = "text-error";
+  if (!branchSelect.value || !reservedAt()) {
+    availabilityResult.textContent = "Vui lòng chọn chi nhánh, ngày và giờ.";
     return false;
   }
-
-  availabilityResult.textContent = "Đang kiểm tra...";
-  availabilityResult.className = "muted";
-
+  availabilityResult.textContent = "Đang kiểm tra tình trạng bàn...";
   try {
-    const result = await api.get("/reservations/availability", {
-      branch_id: branchId,
-      reserved_at: dateTime,
-      party_size: partySize,
-    });
-    availabilityResult.textContent = result.message + " (" + result.available_tables + " bàn phù hợp)";
-    availabilityResult.className = result.available ? "availability-ok" : "text-error";
+    const result = await api.get("/reservations/availability", {branch_id:Number(branchSelect.value), reserved_at:reservedAt(), party_size:Number(partyInput.value)});
+    availabilityResult.textContent = result.message + " · " + result.available_tables + " bàn phù hợp";
+    availabilityResult.className = result.available ? "availability-ok" : "availability-no";
     return result.available;
   } catch (error) {
     availabilityResult.textContent = error.message;
-    availabilityResult.className = "text-error";
+    availabilityResult.className = "availability-no";
     return false;
   }
 }
-
-document.getElementById("btn-check").addEventListener("click", checkAvailability);
-branchSelect.addEventListener("change", updateBranchInfo);
-
-[dateInput, timeInput, partyInput, branchSelect].forEach((input) => {
-  input.addEventListener("change", () => {
-    availabilityResult.textContent = "";
-    availabilityResult.className = "muted";
+document.querySelectorAll("#time-options button").forEach((button) => {
+  button.addEventListener("click", () => {
+    document.querySelectorAll("#time-options button").forEach((item) => item.classList.remove("selected"));
+    button.classList.add("selected");
+    selectedTime = button.dataset.time;
+    availabilityResult.textContent = "Nhấn kiểm tra để xem bàn còn trống.";
+    updateSummary();
   });
 });
-
-bookingForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-
-  const reservedAt = getBookingDateTime();
-  const data = {
-    branch_id: Number(branchSelect.value),
-    guest_name: document.getElementById("guest-name").value.trim(),
-    guest_phone: document.getElementById("guest-phone").value.trim(),
-    email: document.getElementById("guest-email").value.trim() || null,
-    party_size: Number(partyInput.value),
-    reserved_at: reservedAt,
-    note: document.getElementById("booking-note").value.trim() || null,
-  };
-
+document.querySelectorAll('input[name="area"]').forEach((input) => input.addEventListener("change", () => {
+  document.querySelectorAll(".area-option").forEach((item) => item.classList.toggle("selected", item.querySelector("input").checked));
+  updateSummary();
+}));
+[branchSelect,dateInput,partyInput].forEach((input) => input.addEventListener("change", () => {
+  availabilityResult.textContent = "Nhấn kiểm tra để xem bàn còn trống.";
+  updateSummary();
+}));
+document.getElementById("guest-name").addEventListener("input", updateSummary);
+document.getElementById("btn-check").addEventListener("click", checkAvailability);
+document.getElementById("btn-book").addEventListener("click", async () => {
+  bookingError.hidden = true;
+  const branch = selectedBranch();
+  const name = document.getElementById("guest-name").value.trim();
+  const phone = document.getElementById("guest-phone").value.trim();
+  const email = document.getElementById("guest-email").value.trim();
+  if (!branch || !dateInput.value || !selectedTime || !name || !phone) {
+    showBookingError("Vui lòng điền đầy đủ chi nhánh, thời gian, họ tên và số điện thoại.");
+    return;
+  }
+  if (name.length < 2 || !/^[0-9+ -]{9,20}$/.test(phone)) {
+    showBookingError("Họ tên hoặc số điện thoại chưa hợp lệ.");
+    return;
+  }
+  if (new Date(reservedAt()) <= new Date()) {
+    showBookingError("Thời gian đặt bàn phải ở tương lai.");
+    return;
+  }
   const button = document.getElementById("btn-book");
   button.disabled = true;
-  bookingResult.innerHTML = "";
-
+  button.textContent = "Đang gửi yêu cầu...";
+  const data = {branch_id:Number(branchSelect.value),guest_name:name,guest_phone:phone,email:email || null,party_size:Number(partyInput.value),reserved_at:reservedAt(),note:document.getElementById("booking-note").value.trim() || null};
   try {
     const reservation = await api.post("/reservations", data);
-    bookingResult.innerHTML =
-      '<div class="booking-success"><h3>Đã gửi yêu cầu đặt bàn!</h3>' +
-      '<p>Mã đặt bàn của bạn:</p><strong class="booking-code">' +
-      escapeHtml(reservation.code) + '</strong>' +
-      '<p>Vui lòng lưu mã này và số điện thoại để tra cứu hoặc hủy đặt bàn.</p>' +
-      '<p>Trạng thái: <strong>Chờ xác nhận</strong></p></div>';
-    showToast("Đặt bàn thành công");
-    bookingForm.reset();
-    dateInput.min = localDateValue(new Date());
-    partyInput.value = "2";
-    updateBranchInfo();
-    availabilityResult.textContent = "";
+    latestReservationCode = reservation.code;
+    document.getElementById("success-code").textContent = reservation.code;
+    document.getElementById("success-time").textContent = formatDateTime(reservation.reserved_at);
+    document.getElementById("success-party").textContent = reservation.party_size + " khách";
+    document.getElementById("success-branch").textContent = branch.name;
+    document.getElementById("success-area").textContent = selectedArea();
+    document.getElementById("success-status").textContent = "Trạng thái: " + (reservation.status === "pending" ? "Chờ xác nhận từ nhà hàng" : reservation.status);
+    sessionStorage.setItem("latestReservation", JSON.stringify({code:reservation.code,phone:phone}));
+    bookingFormView.hidden = true;
+    successView.hidden = false;
+    window.scrollTo({top:0,behavior:"smooth"});
   } catch (error) {
-    showToast(error.message, "error");
+    document.getElementById("failure-message").textContent = error.message || "Không thể gửi yêu cầu. Vui lòng thử lại.";
+    bookingFormView.hidden = true;
+    failureView.hidden = false;
+    window.scrollTo({top:0,behavior:"smooth"});
   } finally {
     button.disabled = false;
+    button.textContent = "♧  Xác Nhận Đặt Bàn Ngay";
   }
 });
-
-function getLookupData() {
-  return {
-    code: document.getElementById("lookup-code").value.trim().toUpperCase(),
-    phone: document.getElementById("lookup-phone").value.trim(),
-  };
-}
-
-function renderReservation(reservation) {
-  const statuses = {
-    pending: "Chờ xác nhận",
-    confirmed: "Đã xác nhận",
-    seated: "Đang phục vụ",
-    cancelled: "Đã hủy",
-    no_show: "Không đến",
-  };
-
-  lookupResult.innerHTML =
-    '<div class="lookup-detail"><p><strong>Mã đặt bàn:</strong> ' + escapeHtml(reservation.code) + '</p>' +
-    '<p><strong>Khách hàng:</strong> ' + escapeHtml(reservation.guest_name) + '</p>' +
-    '<p><strong>Số khách:</strong> ' + reservation.party_size + '</p>' +
-    '<p><strong>Thời gian:</strong> ' + formatDateTime(reservation.reserved_at) + '</p>' +
-    '<p><strong>Trạng thái:</strong> ' + escapeHtml(statuses[reservation.status] || reservation.status) + '</p>' +
-    '<p><strong>Ghi chú:</strong> ' + escapeHtml(reservation.note || "Không có") + '</p></div>';
-}
-
-lookupForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  lookupResult.textContent = "Đang tra cứu...";
-  try {
-    const reservation = await api.post("/reservations/lookup", getLookupData());
-    renderReservation(reservation);
-  } catch (error) {
-    lookupResult.textContent = error.message;
-    showToast(error.message, "error");
-  }
+document.getElementById("copy-code").addEventListener("click", async () => {
+  if (!latestReservationCode) return;
+  await navigator.clipboard.writeText(latestReservationCode);
+  showToast("Đã sao chép mã đặt bàn");
 });
-
-cancelBookingButton.addEventListener("click", async () => {
-  if (!lookupForm.reportValidity()) return;
-  if (!confirm("Bạn chắc chắn muốn hủy đặt bàn này?")) return;
-
-  try {
-    const reservation = await api.post("/reservations/cancel", getLookupData());
-    renderReservation(reservation);
-    showToast("Đã hủy đặt bàn");
-  } catch (error) {
-    showToast(error.message, "error");
-  }
+document.getElementById("retry-booking").addEventListener("click", () => {
+  failureView.hidden = true;
+  bookingFormView.hidden = false;
 });
-
-dateInput.min = localDateValue(new Date());
-dateInput.value = localDateValue(new Date());
-timeInput.value = "19:00";
-loadBookingBranches();
+dateInput.min = dateValue(new Date());
+dateInput.value = dateValue(new Date());
+loadBranches();
