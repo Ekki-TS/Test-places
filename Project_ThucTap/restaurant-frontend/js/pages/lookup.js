@@ -3,6 +3,7 @@ const lookupError=document.getElementById("lookup-error");
 const detail=document.getElementById("lookup-detail");
 let currentReservation=null;
 let currentMode="code";
+let branchNames={};
 document.querySelectorAll(".lookup-tabs button").forEach((button)=>button.addEventListener("click",()=>{
   document.querySelectorAll(".lookup-tabs button").forEach((item)=>item.classList.toggle("active",item===button));
   currentMode=button.dataset.mode;
@@ -19,7 +20,7 @@ function renderDetail(item){
   document.getElementById("detail-name").textContent=item.guest_name;
   document.getElementById("detail-time").textContent=formatDateTime(item.reserved_at);
   document.getElementById("detail-party").textContent=item.party_size+" khách";
-  document.getElementById("detail-branch").textContent="Chi nhánh #"+item.branch_id;
+  document.getElementById("detail-branch").textContent=branchNames[item.branch_id]||("Chi nhánh #"+item.branch_id);
   document.getElementById("detail-note").textContent=item.note||"Không có";
   document.getElementById("cancel-reservation").hidden=!["pending","confirmed"].includes(item.status);
   detail.hidden=false;
@@ -34,5 +35,6 @@ document.getElementById("cancel-reservation").addEventListener("click",async()=>
   try{const item=await api.post("/reservations/cancel",lookupData());renderDetail(item);showToast("Đã hủy đặt bàn");}
   catch(error){lookupError.textContent=error.message;lookupError.hidden=false;}
 });
+api.get("/reservations/branches").then((items)=>{branchNames=Object.fromEntries(items.map((branch)=>[branch.id,branch.name]));}).catch(()=>{});
 const saved=sessionStorage.getItem("latestReservation");
 if(saved){try{const data=JSON.parse(saved);document.getElementById("lookup-code").value=data.code;document.getElementById("lookup-phone").value=data.phone;}catch{}}
