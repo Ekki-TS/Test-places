@@ -102,7 +102,9 @@ document.getElementById("btn-book").addEventListener("click", async () => {
   const button = document.getElementById("btn-book");
   button.disabled = true;
   button.textContent = "Đang gửi yêu cầu...";
-  const data = {branch_id:Number(branchSelect.value),guest_name:name,guest_phone:phone,email:email || null,party_size:Number(partyInput.value),reserved_at:reservedAt(),note:document.getElementById("booking-note").value.trim() || null};
+  const guestNote = document.getElementById("booking-note").value.trim();
+  const areaNote = "Khu vực ưu tiên: " + selectedArea();
+  const data = {branch_id:Number(branchSelect.value),guest_name:name,guest_phone:phone,email:email || null,party_size:Number(partyInput.value),reserved_at:reservedAt(),note:(areaNote + (guestNote ? " | Ghi chú: " + guestNote : "")).slice(0,255)};
   try {
     const reservation = await api.post("/reservations", data);
     latestReservationCode = reservation.code;
@@ -128,8 +130,12 @@ document.getElementById("btn-book").addEventListener("click", async () => {
 });
 document.getElementById("copy-code").addEventListener("click", async () => {
   if (!latestReservationCode) return;
-  await navigator.clipboard.writeText(latestReservationCode);
-  showToast("Đã sao chép mã đặt bàn");
+  try {
+    await navigator.clipboard.writeText(latestReservationCode);
+    showToast("Đã sao chép mã đặt bàn");
+  } catch {
+    showToast("Không thể sao chép tự động. Mã đặt bàn: " + latestReservationCode, "error");
+  }
 });
 document.getElementById("retry-booking").addEventListener("click", () => {
   failureView.hidden = true;
